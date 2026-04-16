@@ -41,7 +41,7 @@ const Home = () => {
           >
             <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-accentSecondary/20 rounded-full blur-3xl animate-pulse"></div>
             <img 
-              src="/arun_home.png" 
+              src="/Nura/arun_home.png" 
               alt="Arun Nehru" 
               className="w-full h-full object-contain relative z-10 drop-shadow-2xl" 
             />

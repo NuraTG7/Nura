@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const achievements = [
   {
     title: "IEEE Xtreme 2024 - Top 100 Global",
@@ -40,30 +42,41 @@ const Achievements = () => {
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {achievements.map((item, idx) => (
-          <div 
-            key={idx} 
-            className="group bg-secondary/30 backdrop-blur border border-glass rounded-xl overflow-hidden hover:-translate-y-2 hover:border-accentSecondary hover:shadow-[0_10px_30px_rgba(255,20,147,0.15)] transition-all duration-300 flex flex-col cursor-pointer p-8 relative"
-            data-aos="fade-up"
-            data-aos-delay={idx * 50}
-          >
-            <div className="absolute top-0 right-0 w-16 h-16 bg-accentSecondary/10 rounded-bl-full pointer-events-none group-hover:bg-accentSecondary/20 transition-colors"></div>
-            
-            <div className="text-4xl mb-6 transform group-hover:scale-110 transition-transform origin-left">
-              🏆
+        {achievements.map((item, idx) => {
+          const CardContent = (
+            <div
+              className="group bg-secondary/40 hover:bg-secondary/60 backdrop-blur hover:backdrop-blur-xl border border-red-500 dark:border-purple-500 rounded-[1.1rem] overflow-hidden hover:scale-105 hover:shadow-[0_8px_32px_rgba(239,68,68,0.25)] dark:hover:shadow-[0_8px_32_rgba(168,85,247,0.3)] transition-all duration-300 flex flex-col cursor-pointer p-8 relative h-full"
+              data-aos="fade-up"
+              data-aos-delay={idx * 50}
+            >
+              <div className="absolute top-0 right-0 w-16 h-16 bg-red-500/10 dark:bg-purple-500/10 rounded-bl-full pointer-events-none group-hover:bg-red-500/20 dark:group-hover:bg-purple-500/20 transition-colors"></div>
+
+              <div className="text-4xl mb-6 transform group-hover:scale-110 transition-transform origin-left">
+                🏆
+              </div>
+
+              <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-red-500 dark:text-purple-400 mb-2 bg-red-500/10 dark:bg-purple-500/10 px-2 py-1 rounded w-max">
+                {item.badge}
+              </span>
+
+              <h3 className="text-xl font-bold text-textMain mb-3 leading-tight">{item.title}</h3>
+
+              <p className="text-textMuted text-sm flex-grow">
+                {item.desc}
+              </p>
             </div>
+          );
 
-            <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-accentSecondary mb-2 bg-accentSecondary/10 px-2 py-1 rounded w-max">
-              {item.badge}
-            </span>
+          if (item.title === "Competitive Programming Champion") {
+            return (
+              <Link to="/excellence" key={idx} className="block h-full">
+                {CardContent}
+              </Link>
+            );
+          }
 
-            <h3 className="text-xl font-bold text-textMain mb-3 leading-tight">{item.title}</h3>
-            
-            <p className="text-textMuted text-sm flex-grow">
-              {item.desc}
-            </p>
-          </div>
-        ))}
+          return <div key={idx}>{CardContent}</div>;
+        })}
       </div>
     </div>
   );

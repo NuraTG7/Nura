@@ -47,15 +47,17 @@ const projectsList = [
 const Projects = () => {
   const scrollRef = useRef(null);
   const [scrollRot, setScrollRot] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (el) {
       const onScroll = () => {
-        // Calculate rotation based on horizontal scroll
+        // Calculate rotation and progress based on horizontal scroll
         const maxScroll = el.scrollWidth - el.clientWidth;
-        const scrollFraction = el.scrollLeft / maxScroll;
+        const scrollFraction = maxScroll > 0 ? el.scrollLeft / maxScroll : 0;
         setScrollRot(scrollFraction * 360 * 2); // Two full spins
+        setScrollProgress(scrollFraction * 100);
       };
       
       const onWheel = e => {
@@ -64,12 +66,19 @@ const Projects = () => {
         }
       };
       
+      // Initialize progress
+      onScroll();
+      
       el.addEventListener('scroll', onScroll, { passive: true });
       el.addEventListener('wheel', onWheel, { passive: true });
+      
+      // Update progress on resize since maxScroll changes
+      window.addEventListener('resize', onScroll);
       
       return () => {
         el.removeEventListener('scroll', onScroll);
         el.removeEventListener('wheel', onWheel);
+        window.removeEventListener('resize', onScroll);
       };
     }
   }, []);
@@ -82,7 +91,7 @@ const Projects = () => {
         </h1>
         {/* Scrolling Pokeball */}
         <div className="w-16 h-16 pointer-events-none opacity-80" style={{ transform: `rotate(${scrollRot}deg)` }}>
-          <img src="/pokeball.svg" alt="pokeball" className="w-full h-full drop-shadow-xl" />
+          <img src="/Nura/pokeball.svg" alt="pokeball" className="w-full h-full drop-shadow-xl" />
         </div>
       </div>
 
@@ -92,19 +101,30 @@ const Projects = () => {
         style={{ scrollBehavior: 'smooth' }}
       >
         {projectsList.map((proj, idx) => (
-          <div key={idx} className="min-w-[320px] md:min-w-[380px] h-[400px] snap-center shrink-0 group">
+          <div key={idx} className="min-w-[320px] md:min-w-[380px] h-[400px] snap-center shrink-0">
             
-            <div className="animated-border-box h-full">
-              <div className="animated-border-content p-6 flex flex-col shadow-xl">
+            <div 
+              className="animated-border-box h-full group"
+              style={{
+                '--border-bg': 'var(--text-primary)', // Black in light mode, White in dark mode
+                '--static-opacity': '1',
+                '--spin-opacity': '0',
+                '--hover-static-opacity': '0',
+                '--hover-spin-opacity': '1',
+                '--spin-color-1': '#ef4444',
+                '--spin-color-2': '#3b82f6'
+              }}
+            >
+              <div className="animated-border-content flex flex-col shadow-xl overflow-hidden relative">
                 
                 {/* Default State (Image/Title) */}
-                <div className="flex-1 flex flex-col justify-center items-center group-hover:opacity-0 transition-opacity duration-300 absolute inset-0 p-8">
+                <div className="flex-1 flex flex-col justify-center items-center group-hover:-translate-x-full transition-transform duration-500 absolute inset-0 p-8 z-0">
                   <div className="text-6xl mb-6">{proj.icon}</div>
                   <h3 className="text-2xl font-bold text-textMain text-center">{proj.title}</h3>
                 </div>
 
-                {/* Hover State (Description/Domain) */}
-                <div className="flex-1 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0 p-8 bg-primary z-10">
+                {/* Hover State (Description/Domain) Sliding from Right */}
+                <div className="flex-1 flex flex-col justify-between translate-x-full group-hover:translate-x-0 transition-transform duration-500 absolute inset-0 p-8 bg-primary z-10">
                   <div>
                     <h3 className="text-xl font-bold text-accent mb-2">{proj.title}</h3>
                     <span 
@@ -131,6 +151,14 @@ const Projects = () => {
 
           </div>
         ))}
+      </div>
+      
+      {/* Scroll Progress Bar */}
+      <div className="w-full max-w-md mx-auto mt-4 h-2 bg-glass rounded-full overflow-hidden shrink-0 hidden md:block">
+        <div 
+          className="h-full bg-gradient-to-r from-accent to-accentSecondary transition-all duration-300 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        ></div>
       </div>
     </div>
   );

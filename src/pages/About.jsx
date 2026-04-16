@@ -6,18 +6,23 @@ const About = () => {
   return (
     <div className="animate-fade-in pb-12">
       <div className="flex items-center gap-4 mb-12">
-        <Link to="/" className="text-textMuted hover:text-accent transition-colors text-2xl">←</Link>
+        <Link to="/home" className="text-textMuted hover:text-accent transition-colors text-2xl">←</Link>
         <h1 className="text-3xl font-display font-bold text-textMain">About Me</h1>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-12 mb-20 items-center">
         {/* Personal Image */}
         <div className="lg:col-span-1 flex justify-center order-2 lg:order-1">
-          <div className="w-full flex justify-center items-center">
+          <div className="relative group w-full flex justify-center items-center">
             <img 
-              src="/arun_about.png" 
+              src="/Nura/arun_about_before.png" 
               alt="Arun Nehru" 
-              className="w-full max-w-[300px] lg:max-w-[400px] object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+              className="w-full max-w-[300px] lg:max-w-[400px] object-contain drop-shadow-2xl transition-all duration-500 group-hover:scale-105 group-hover:opacity-0"
+            />
+            <img 
+              src="/Nura/arun_about_after.png" 
+              alt="Arun Nehru" 
+              className="absolute inset-0 m-auto w-full max-w-[300px] lg:max-w-[400px] object-contain drop-shadow-2xl transition-all duration-500 opacity-0 group-hover:scale-105 group-hover:opacity-100"
             />
           </div>
         </div>
@@ -31,7 +36,7 @@ const About = () => {
             </p>
             
             <a 
-              href="/Arun_Nehru_Resume.pdf" 
+              href="/Nura/Arun_Nehru_Resume.pdf" 
               download="Arun_Nehru_Resume.pdf"
               className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-accent text-primary font-bold rounded-lg hover:shadow-lg hover:shadow-accent/30 hover:-translate-y-1 transition-all"
             >

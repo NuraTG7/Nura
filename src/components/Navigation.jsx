@@ -42,9 +42,9 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-5 flex justify-between items-center">
         
         {/* Spinning Pokeball Logo */}
-        <Link to="/" className="flex items-center gap-3">
+        <Link to="/home" className="flex items-center gap-3">
           <img 
-            src="/pokeball.svg" 
+            src="/Nura/pokeball.svg" 
             alt="Pokeball Logo" 
             className="w-12 h-12 animate-spin-slow" 
           />
@@ -114,7 +114,7 @@ const Navigation = () => {
             className="fixed inset-0 bg-primary z-40 flex flex-col justify-center items-center h-screen"
           >
             <div className="flex flex-col gap-8 items-center text-center">
-              <Link to="/" onClick={() => setIsOpen(false)} className="text-2xl font-display font-bold mb-4 text-textMain">Home</Link>
+              <Link to="/home" onClick={() => setIsOpen(false)} className="text-2xl font-display font-bold mb-4 text-textMain">Home</Link>
               {links.map((link) => (
                 <Link 
                   key={link.path}

@@ -12,6 +12,9 @@
     --accent-secondary: #dc2626; 
     --glass: rgba(0, 0, 0, 0.15); /* More visible border for light mode */
     --glass-bg: rgba(255, 255, 255, 0.7); /* Lighter glass bg for light mode */
+    --inverse-color: #000000;
+    --scrollbar-thumb: rgba(0, 0, 0, 0.2);
+    --scrollbar-track: rgba(0, 0, 0, 0.05);
   }
 
   .dark {
@@ -23,6 +26,9 @@
     --accent-secondary: #1d4ed8; 
     --glass: rgba(255, 255, 255, 0.05); /* Softer border for dark mode */
     --glass-bg: rgba(255, 255, 255, 0.05); /* Standard dark glass bg */
+    --inverse-color: #ffffff;
+    --scrollbar-thumb: rgba(255, 255, 255, 0.3);
+    --scrollbar-track: rgba(255, 255, 255, 0.05);
   }
 
   body {
@@ -62,50 +68,167 @@
   scrollbar-width: none;
 }
 
-/* Animated Border classes for Projects */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
+/* Custom Scrollbar for specific containers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--inverse-color);
+}
+
+.inverse-border {
+  border-color: var(--inverse-color);
+}
+
+/* Animated Border classes */
+@property --angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@keyframes spin-gradient {
   to {
-    transform: rotate(360deg);
+    --angle: 360deg;
   }
 }
 
 .animated-border-box {
   position: relative;
-  border-radius: 1rem;
-  overflow: hidden;
   padding: 3px;
+  border-radius: 1.1rem;
+  z-index: 1;
 }
 
 .animated-border-box::before {
   content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200%;
-  height: 200%;
-  /* red and blue continuous slow spin */
-  background: conic-gradient(from 0deg, transparent 0%, transparent 40%, #ef4444 80%, #3b82f6 100%);
-  transform-origin: 0 0;
-  animation: spin 5s linear infinite;
-  z-index: 0;
-  margin-top: -100%;
-  margin-left: -100%;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -2;
+  background: conic-gradient(from var(--angle), transparent 0%, transparent 60%, var(--spin-color-1, #ef4444) 80%, var(--spin-color-2, #3b82f6) 100%);
+  animation: spin-gradient 2.5s linear infinite;
+  opacity: var(--spin-opacity, 1);
+  transition: opacity 0.4s ease;
+}
+
+.animated-border-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  background: var(--border-bg, transparent); 
+  opacity: var(--static-opacity, 0); 
+  transition: opacity 0.4s ease;
+}
+
+.group:hover .animated-border-box::after {
+  opacity: var(--hover-static-opacity, var(--static-opacity, 0));
 }
 
 .group:hover .animated-border-box::before {
-  /* red and white gradient on hover */
-  background: conic-gradient(from 0deg, transparent 0%, transparent 40%, #ef4444 80%, #ffffff 100%);
-  animation: spin 3s linear infinite;
+  opacity: var(--hover-spin-opacity, var(--spin-opacity, 1));
 }
 
 .animated-border-content {
-  position: relative;
-  z-index: 1;
   background: var(--bg-primary);
-  border-radius: calc(1rem - 3px);
+  border-radius: calc(1.1rem - 3px);
   width: 100%;
   height: 100%;
+  position: relative;
+  z-index: 1;
 }
+
+/* Experience company card — always-spinning border */
+/* Light mode: red  |  Dark mode: green */
+.exp-company-border {
+  --spin-opacity: 1;
+  --spin-color-1: transparent;
+  --spin-color-2: #ef4444; /* red */
+}
+
+.dark .exp-company-border {
+  --spin-color-2: #22c55e; /* green */
+}
+
+/* RGB cycling animation for the experience timeline divider */
+@keyframes hue-spin {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
+}
+
+.rgb-line {
+  animation: hue-spin 4s linear infinite;
+}
+
+/* Description card transform — rotate only on desktop */
+.desc-card {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.desc-card.company-hovered {
+  transform: scale(1.05) rotate(5deg);
+}
+@media (max-width: 767px) {
+  .desc-card.company-hovered {
+    transform: scale(1.05) rotate(0deg);
+  }
+}
+
+/* Prize Border Styles */
+.prize-gold {
+  --spin-color-1: #FFD700;
+  --spin-color-2: #B8860B;
+  --spin-opacity: 1;
+}
+
+.prize-silver {
+  --spin-color-1: #C0C0C0;
+  --spin-color-2: #808080;
+  --spin-opacity: 1;
+}
+
+.prize-bronze {
+  --spin-color-1: #FF4D4D;
+  --spin-color-2: #FF0000;
+  --spin-opacity: 1;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+}
+
+.prize-bronze:hover, .group:hover .prize-bronze {
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+}
+
+/* Animated Red-Yellow Line */
+.animated-red-yellow-line {
+  background: linear-gradient(
+    to bottom,
+    #ff0000 0%,
+    #ffff00 25%,
+    #ff0000 50%,
+    #ffff00 75%,
+    #ff0000 100%
+  );
+  background-size: 100% 200%;
+  animation: move-gradient 3s linear infinite;
+}
+
+@keyframes move-gradient {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% -200%; }
+}
+
+
+

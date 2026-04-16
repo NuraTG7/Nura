@@ -2,20 +2,24 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const defaultImages = [
-  '/gallery/gallery (1).jpg',
-  '/gallery/gallery (2).jpg',
-  '/gallery/gallery (3).jpg',
-  '/gallery/gallery (4).JPG',
-  '/gallery/gallery (5).jpg',
-  '/gallery/gallery (6).jpg',
-  '/gallery/gallery (7).jpg',
-  '/gallery/gallery (8).jpg',
-  '/gallery/gallery (9).jpg',
-  '/gallery/gallery (10).jpg',
-  '/gallery/gallery (11).jpg',
-  '/gallery/gallery (12).jpg',
-  '/gallery/gallery (13).jpg',
-  '/gallery/gallery (14).jpg',
+  '/Nura/gallery/gallery (1).jpg',
+  '/Nura/gallery/gallery (2).jpg',
+  '/Nura/gallery/gallery (3).jpg',
+  '/Nura/gallery/gallery (4).JPG',
+  '/Nura/gallery/gallery (5).jpg',
+  '/Nura/gallery/gallery (6).jpg',
+  '/Nura/gallery/gallery (7).jpg',
+  '/Nura/gallery/gallery (8).jpg',
+  '/Nura/gallery/gallery (9).jpg',
+  '/Nura/gallery/gallery (10).jpg',
+  '/Nura/gallery/gallery (11).jpg',
+  '/Nura/gallery/gallery (12).jpg',
+  '/Nura/gallery/gallery (13).jpg',
+  '/Nura/gallery/gallery (14).jpg',
+  '/Nura/gallery/gallery (15).png',
+  '/Nura/gallery/gallery (16).png',
+  '/Nura/gallery/gallery (17).png',
+  '/Nura/gallery/gallery (18).jpeg',
 ];
 
 const GalleryCarousel = () => {
@@ -51,6 +55,9 @@ const GalleryCarousel = () => {
   };
 
   const offsets = isMobile ? [0] : [-1, 0, 1, 2];
+  
+  // Calculate width percentage for the slider
+  const progressPercentage = ((activeIndex) / (defaultImages.length - 1)) * 100;
 
   return (
     <div className="w-full flex flex-col items-center justify-center py-16 px-4 overflow-hidden relative border-t border-glass bg-primary">
@@ -59,7 +66,7 @@ const GalleryCarousel = () => {
       </h2>
 
       <motion.div 
-        className="flex gap-4 lg:gap-8 items-center justify-center w-full min-h-[500px] cursor-grab active:cursor-grabbing touch-pan-y"
+        className="flex gap-4 lg:gap-8 items-center justify-center w-full min-h-[400px] lg:min-h-[500px] cursor-grab active:cursor-grabbing touch-pan-y"
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.8}
@@ -99,11 +106,11 @@ const GalleryCarousel = () => {
                 exit={{ opacity: 0, scale: 0.5, x: offset > 0 ? -50 : 50 }}
                 transition={{ duration: 0.8, ease: "easeInOut" }}
                 className={`shrink-0 overflow-hidden rounded-2xl ${offset === -1 || offset === 2 ? 'cursor-pointer' : 'cursor-default'}
-                  ${isCenter ? 'animated-border-box w-[90vw] md:w-[450px] lg:w-[550px] h-[300px] lg:h-[350px] drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)] z-10' 
+                  ${isCenter ? 'w-[90vw] md:w-[450px] lg:w-[550px] h-[300px] lg:h-[350px] drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)] z-10 border border-glass' 
                   : 'w-[200px] lg:w-[280px] h-[150px] lg:h-[200px] opacity-60 hover:opacity-100 z-0'}
                 `}
               >
-                <div className={`w-full h-full rounded-[calc(1rem-3px)] overflow-hidden ${isCenter ? 'animated-border-content p-[2px]' : ''}`}>
+                <div className="w-full h-full rounded-2xl overflow-hidden bg-secondary border border-glass">
                   <img src={src} className="w-full h-full object-cover rounded-xl" alt="Gallery frame" />
                 </div>
               </motion.div>
@@ -111,6 +118,15 @@ const GalleryCarousel = () => {
           })}
         </AnimatePresence>
       </motion.div>
+
+      {/* Progress Slider at the bottom */}
+      <div className="w-full max-w-md mx-auto mt-8 h-2 bg-glass rounded-full overflow-hidden shrink-0">
+        <div 
+          className="h-full bg-gradient-to-r from-accent to-accentSecondary transition-all duration-500 ease-out"
+          style={{ width: `${Math.max(5, progressPercentage)}%` }} /* Default min-width 5% to always show some progress */
+        ></div>
+      </div>
+      
     </div>
   );
 };
